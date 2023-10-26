@@ -11,25 +11,28 @@ import os
 torch.cuda.set_device(3)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 from sklearn.preprocessing import StandardScaler
-from blitz.modules import BayesianLSTM,BayesianGRU,BayesianLinear
-from blitz.utils import variational_estimator
+import torch.nn.functional as F
+from torch.distributions import normal,cauchy, kl_divergence
+
 import time
+
 import sys
 sys.path.append('.')
 from utils import *
-    
+
 
 if __name__ == '__main__':
-    root_path = './lr5'
+    diff_steps = 5
+    root_path = './lr5_'+str(diff_steps)
     for t in range(1):
         t = t+1
         setup_seed(t)
         batch_size = 256
         print("begin loading data")
-        train_data_path = './GEF_data/train_data.npy'
-        train_label_path = './GEF_data/train_label.npy'
-        val_data_path = './GEF_data/val_data.npy'
-        val_label_path = './GEF_data/val_label.npy'
+        train_data_path = '../GEF_data/train_data.npy'
+        train_label_path = '../GEF_data/train_label.npy'
+        val_data_path = '../GEF_data/val_data.npy'
+        val_label_path = '../GEF_data/val_label.npy'
         mytrain_data = np.load(train_data_path)
         cov = mytrain_data.shape[2]
         day = mytrain_data.shape[1]
@@ -54,16 +57,17 @@ if __name__ == '__main__':
         val_loader = DataLoader(new_val, shuffle=True, batch_size=batch_size)
         print("finish loading data")
         path  = create_folder(root_path,t)
-        input_size, hidden_size, num_layers, output_size = 6, [64,64], 2, 1
-        model = GRU(input_size, hidden_size, num_layers, output_size).to(device)
-        total = sum([param.nelement() for param in model.parameters()])
-        print("Number of parameter: %.2fM" % (total/1e6))
+        input_size, hidden_size, num_layers, output_size, num_steps = 6, [64,64], 2, 1,diff_steps
+ 
+        model = GRU(input_size, hidden_size, num_layers, output_size,num_steps).to(device)
         loss_function = likelihood().to(device)
+
         optimizer = torch.optim.Adam(model.parameters(), lr=0.0005)
         epochs = 300
 
         count = 15
         val_min = np.inf
+        model.train()
         start_time = time.time()
         for i in range(epochs):
             if count>15:
@@ -78,15 +82,11 @@ if __name__ == '__main__':
                 
                 
 
-                # mu, sigma = model(train_data)
-                # mu = mu.reshape(-1)
-                # sigma = sigma.reshape(-1)
-                loss = model.sample_elbo(inputs=train_data,
-                               labels=train_label,
-                               criterion=loss_function,
-                               sample_nbr=100,
-                               complexity_cost_weight=1/mytrain_data.shape[0])
+                mu, sigma,diff_loss,main_value = model(train_data)
+                mu = mu.reshape(-1)
+                sigma = sigma.reshape(-1)
 
+                loss = loss_function(train_label-main_value,mu,sigma,diff_loss)
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -98,11 +98,11 @@ if __name__ == '__main__':
                 val_data = data.to(device)
                 val_label = label.reshape(-1).to(device)
                 with torch.no_grad():
-                    val_mu, val_sigma = model(val_data)
-                    # val_mu = model(val_data)
+                    val_mu, val_sigma,_,val_value = model(val_data)
                 val_mu = val_mu.reshape(-1)
                 val_sigma = val_sigma.reshape(-1)
-                val_loss = RMSE(val_label,val_mu)
+                val_value = val_value.reshape(-1)
+                val_loss = RMSE(val_label,val_value+val_mu)
                 val_RMSE.append(val_loss.item())
 
             loss_av = np.mean(losses)
@@ -118,14 +118,8 @@ if __name__ == '__main__':
             else:
                 count = count+1
                 print('count:',count)
+        
         end_time = time.time()
         run_time = end_time - start_time
-        df = pd.DataFrame([run_time])
-        df.to_csv(path+'/'+str(t)+'_Bayesian_lr5.csv',index=False,sep = ',')
-
-                
         
-
-        
-            
             
