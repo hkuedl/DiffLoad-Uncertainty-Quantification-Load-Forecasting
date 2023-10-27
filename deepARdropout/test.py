@@ -26,10 +26,10 @@ if __name__ == '__main__':
         t = t+1
         setup_seed(t)
         print("begin loading data")
-        train_data_path = './GEF_data/train_data.npy'
-        train_label_path = './GEF_data/train_label.npy'
-        test_data_path = './GEF_data/test_data.npy'
-        test_label_path = './GEF_data/test_label.npy'
+        train_data_path = '../GEF_data/train_data.npy'
+        train_label_path = '../GEF_data/train_label.npy'
+        test_data_path = '../GEF_data/test_data.npy'
+        test_label_path = '../GEF_data/test_label.npy'
         mytrain_data = np.load(train_data_path)
         cov = mytrain_data.shape[2]
         day = mytrain_data.shape[1]
