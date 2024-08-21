@@ -2,7 +2,7 @@
 
 ## Intro
 
-This is the corresponding code for the paper "DiffLoad: Uncertainty Quantification in Load Forecasting with the Diffusion Model". 
+This work proposes a diffusion-based Seq2seq structure to estimate epistemic uncertainty and employs the robust additive Cauchy distribution to estimate aleatoric uncertainty, which not only ensures the accuracy of load forecasting but also demonstrates the ability to separate the two types of uncertainties for different levels of loads, giving more information for the downstream decision makers.
 
 Codes for Paper "DiffLoad: Uncertainty Quantification in Load Forecasting with the Diffusion Model".
 
