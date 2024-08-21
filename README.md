@@ -2,7 +2,11 @@
 
 ## Intro
 
-This is the corresponding code for the paper "DiffLoad: Uncertainty Quantification in Load Forecasting with the Diffusion Model". We have provided corresponding code for all uncertainty estimation methods mentioned in the paper, such as Bayesian neural network. Please run __train.py__ and __test.py__ respectively in the corresponding folders to reproduce the relevant results.
+This is the corresponding code for the paper "DiffLoad: Uncertainty Quantification in Load Forecasting with the Diffusion Model". We have provided corresponding codes for all uncertainty estimation methods mentioned in the paper, such as the Bayesian neural network. Please run __train.py__ and __test.py__ respectively in the corresponding folders to reproduce the relevant results.
+
+Codes for Paper "DiffLoad: Uncertainty Quantification in Load Forecasting with the Diffusion Model".
+
+Authors: Zhixian Wang, Qingsong Wen, Chaoli Zhang, Liang Sun, and Yi Wang.
 ## Prerequisites
 - Python 
 - Conda
