@@ -34,6 +34,7 @@ Authors: Zhixian Wang, Qingsong Wen, Chaoli Zhang, Liang Sun, and Yi Wang.
 We have provided corresponding codes for all uncertainty estimation methods mentioned in the paper, such as the Bayesian neural network. Please run __train.py__ and __test.py__ respectively in the corresponding folders to reproduce the relevant results.
 
 ```
-cd seq2seqdiffusion/
+cd seq2seq_diffusion
 python train.py
+python test.py
 ```
