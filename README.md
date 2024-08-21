@@ -8,10 +8,6 @@ Codes for Paper "DiffLoad: Uncertainty Quantification in Load Forecasting with t
 
 Authors: Zhixian Wang, Qingsong Wen, Chaoli Zhang, Liang Sun, and Yi Wang.
 
-## Experiments 
-
-We have provided corresponding codes for all uncertainty estimation methods mentioned in the paper, such as the Bayesian neural network. Please run __train.py__ and __test.py__ respectively in the corresponding folders to reproduce the relevant results.
-
 ## Prerequisites
 - Python 
 - Conda
@@ -31,3 +27,8 @@ We have provided corresponding codes for all uncertainty estimation methods ment
   - pytorch
   - scipy
   - blitz
+
+
+## Experiments 
+
+We have provided corresponding codes for all uncertainty estimation methods mentioned in the paper, such as the Bayesian neural network. Please run __train.py__ and __test.py__ respectively in the corresponding folders to reproduce the relevant results.
