@@ -190,7 +190,7 @@ class GRU(nn.Module):
         hidden_bfencode = q_x(hidden_bfencode,self.num_steps-1)
         diff_loss = diffusion_loss_fn(self.reverse,hidden_bfencode,alphas_bar_sqrt,one_minus_alphas_bar_sqrt,self.num_steps-1)
         
-        hidden_afencode = p_sample(self.reverse,hidden_bfencode,self.num_steps-1,betas,one_minus_alphas_bar_sqrt)
+        hidden_afencode = p_sample_loop(self.reverse,hidden_bfencode,self.num_steps-1,betas,one_minus_alphas_bar_sqrt)
         
 
         hidden_afencode = hidden_afencode.reshape(1,hidden_afencode.shape[0],-1)
